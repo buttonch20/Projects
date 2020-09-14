@@ -1,0 +1,119 @@
+import math
+import pandas as pd
+import itertools
+from collections import Sequence
+from itertools import chain, count
+import random
+truths = [[0,0,1], [0,1,1]]
+length = len(truths[0])
+tf  = False
+ 
+
+
+#opens up your array, and prints every bool value
+def tables(truths, tf, length): #Truths is an array, tf is if you want binary or english, and length is amount of var
+    x = 0
+    print(truths)
+    for item in truths:
+        line = ""
+        for boolean in truths[x]:
+            if tf == True:
+                if boolean == 1:
+                    line = line + "True" + ", "
+                else:
+                    line = line + "False" + ", "
+            else:
+                
+                line = line + str(boolean) + ", "
+            
+        x +=1
+        print(line)
+#Finds the depth of your nested list       
+def depthCount(x):
+    return 1 + max(map(depthCount, x)) if x and isinstance(x, list) else 0
+    
+def push(obj, l, depth):
+    levels = 0
+    while depth:
+        l = l[-1]
+        depth -= 1
+        if depth > levels:
+            levels = depth
+            print(levels)
+
+    l.append(obj)
+
+#Grabs nested parentheses and puts it in a list within a list
+def parse_parentheses(s):
+    groups = []
+    depth = 0
+    try:
+        for char in s:
+            if char == '(':
+                push([], groups, depth)
+                depth += 1
+            elif char == ')':
+                depth -= 1
+            else:
+                push(char, groups, depth)
+    except IndexError:
+        raise ValueError('Parentheses mismatch')
+
+    if depth > 0:
+        raise ValueError('Parentheses mismatch')
+    else:
+        return groups
+
+def get_inner(nested):
+    if all(type(x) == list for x in nested):
+        return sum(map(get_inner, nested), [])
+    return [nested]
+
+#Checks to see how many variables you have, and calls other functions
+def truth_table():
+    letters = "abcdefghijklmnopqrstuvwxyz"
+    total = 0
+    eq = input("Enter your equation, only lowercase please ")
+   #This gets the total number of unique varibles in your equation
+    for i in eq:
+        if i in letters:
+            total += 1
+            letters = letters.replace(str(i), "")
+        else:
+            pass
+    print("\nIt seems you have ",total, " Unique variables ") 
+    print(total)
+    #This finds every possible combination of 0 and 1 for the number of unquie variables you have
+    truths = [list(i) for i in itertools.product([0, 1], repeat=total)] 
+    truths.reverse()
+    #this takes the users equation sends it to be orderedorderofoperation
+    orderofoperation = (parse_parentheses(eq))
+    #how many list are in your list of list
+    maxdepth = depthCount(orderofoperation) -1
+    num = 50
+    az = get_inner(orderofoperation)       
+    for i in eq:
+        print(i)
+    
+    tables(eq, True, 3)
+
+
+    
+   
+def main():
+    print("Hello and welcome to my Discrete Structures Solver")
+    print("Created by Christopher Button\n")
+    print("MENU")
+    print("1) TRUTHS TABLE TO EQUATION")
+    print("2) EQUATION TO TRUTH TABLE\n")
+    choice = ("My option is _____ ")
+    while True:
+        choice = input("My option is _____ ")
+        if choice == "1" or choice == "2" :
+            break
+        else:
+            print("Not an option")
+            pass
+        
+    print("no")        
+    
